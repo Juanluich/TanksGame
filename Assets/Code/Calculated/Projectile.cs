@@ -1,36 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] float _initialVelocity;
-    [SerializeField] float _angle;
-
     [SerializeField] LineRenderer _line;
     [SerializeField] float _step;
     [SerializeField] Transform _firePoint;
 
-    public Transform target;
+    [SerializeField] Transform targetCircle;
+    [SerializeField] float height = 2;
+
+    [SerializeField] Transform TopPart;
+
+    private Camera _cam;
+    private void Awake()
+    {
+        _cam = Camera.main;
+    }
 
     private void Update()
     {
-
-        Vector3 direction = target.position - _firePoint.position;
-        Vector3 groundDirection = new Vector3(direction.x, 0, direction.z);
-        Vector3 targetPos = new Vector3(groundDirection.magnitude, direction.y, 0);
-        float height = targetPos.y + targetPos.magnitude / 2f;
-        height = Mathf.Max(0.01f, height);
-        float angle;
-        float v0;
-        float time;
-        CalculatePathWithHeight(targetPos, height, out v0, out angle, out time);
-
-        DrawPath(groundDirection.normalized, v0, angle, time, _step);
-        if (Input.GetKeyDown(KeyCode.Space))
+        Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit))
         {
-            StopAllCoroutines();
-            StartCoroutine(Movement(groundDirection.normalized, v0, angle, time));
+            Vector3 direction = hit.point - _firePoint.position;
+            Vector3 groundDirection = new Vector3(direction.x, 0, direction.z);
+            Vector3 targetPos = new Vector3(groundDirection.magnitude, direction.y, 0);
+            
+            // Place the circle where the mouse goes
+            targetCircle.position = hit.point + new Vector3(0, 0.1f, 0);
+
+            // Avoid flicker rotating when mouse is too close
+            if (Vector3.Distance(hit.point, transform.position) > 2)
+            {
+                direction.y = 0;
+                Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
+                TopPart.rotation = rotation;
+            }
+
+            // Set height curvature with mouse wheel scroll
+            height -= Input.mouseScrollDelta.y;
+
+            //float height = targetPos.y + targetPos.magnitude / 2f + heightPos;
+            height = Mathf.Max(0.01f, height);
+            float angle;
+            float v0;
+            float time;
+            CalculatePathWithHeight(targetPos, height, out v0, out angle, out time);
+
+            DrawPath(groundDirection.normalized, v0, angle, time, _step);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                StopAllCoroutines();
+                StartCoroutine(Movement(groundDirection.normalized, v0, angle, time));
+            }
         }
     }
 

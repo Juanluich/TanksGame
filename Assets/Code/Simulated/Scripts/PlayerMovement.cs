@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
                 randomOffset.y = 0;
                 _agent.destination = hitInfo.point + randomOffset;
                 auxDestination = _agent.destination;
-                //myTurn = false;
+                myTurn = false;
             }
         }
 
