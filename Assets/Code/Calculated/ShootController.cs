@@ -15,13 +15,17 @@ public class ShootController : MonoBehaviour
     public float height = 2;
 
     [SerializeField] Transform TopPart;
+    public bool shooted;
 
     private Camera _cam;
     private void Awake()
     {
         _cam = Camera.main;
+        targetCircle.gameObject.SetActive(false);
+        _line.enabled = false;
     }
-
+    private void OnEnable() { _line.enabled = true; targetCircle.gameObject.SetActive(true); shooted = false; }
+    private void OnDisable(){ _line.enabled = false; }
     private void Update()
     {
         Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
@@ -54,15 +58,16 @@ public class ShootController : MonoBehaviour
             CalculatePathWithHeight(targetPos, height, out v0, out angle, out time);
 
             DrawPath(groundDirection.normalized, v0, angle, time, _step);
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && !shooted)
             {
                 projectile.SetActive(true);
                 StopAllCoroutines();
                 StartCoroutine(Movement(groundDirection.normalized, v0, angle, time));
+                shooted = true;
             }
         }
     }
-
+    
     private void DrawPath(Vector3 direction, float v0, float angle, float time, float step)
     {
         step = Mathf.Max(0.01f, step);
@@ -102,20 +107,6 @@ public class ShootController : MonoBehaviour
         v0 = b / Mathf.Sin(angle);
 
     }
-    private void CalculatePath(Vector3 targetPos, float angle, out float v0, out float time)
-    {
-        float xt = targetPos.x;
-        float yt = targetPos.y;
-        float g = -Physics.gravity.y;
-
-        float v1 = Mathf.Pow(xt, 2) * g;
-        float v2 = 2 * xt * Mathf.Sign(angle) * Mathf.Cos(angle);
-        float v3 = 2 * yt * Mathf.Pow(Mathf.Cos(angle), 2);
-        v0 = Mathf.Sqrt(v1 / (v2 - v3));
-
-        time = xt / (v0 * Mathf.Cos(angle));
-    }
-
     IEnumerator Movement(Vector3 direction, float v0, float angle, float time)
     {
         float t = 0;

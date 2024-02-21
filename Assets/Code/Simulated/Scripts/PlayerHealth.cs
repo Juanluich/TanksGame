@@ -7,24 +7,26 @@ using DG.Tweening;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] int maxHealth = 100;
-    [SerializeField] Image healthBar;
-    [SerializeField] TextMeshProUGUI lifeText;
+    [SerializeField] int _maxHealth = 100;
+    [SerializeField] Image _healthBar;
+    [SerializeField] TextMeshProUGUI _lifeText;
 
-    private int currentHealth;
+    [HideInInspector] public int currentHealth;
 
     public bool getDamage = false;
 
     private void OnValidate()
     {
-        if(getDamage) { GetDamage(25); getDamage = false; }
+        if(getDamage) { 
+            GetDamage(25); 
+            getDamage = false; }
     }
 
     private void Start()
     {
-        currentHealth = maxHealth;
-        lifeText.text = currentHealth.ToString() + "%";
-        healthBar.fillAmount = (float)currentHealth/100;
+        currentHealth = _maxHealth;
+        _lifeText.text = currentHealth.ToString() + "%";
+        _healthBar.fillAmount = (float)currentHealth/100;
     }
     public void GetDamage(int damage)
     {        
@@ -35,7 +37,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void UpdateHealthBar()
     {
-        healthBar.fillAmount = (float)currentHealth / 100f;
-        lifeText.text = currentHealth.ToString() + "%";
+        _healthBar.fillAmount = (float)currentHealth / 100f;
+        _lifeText.text = currentHealth.ToString() + "%";
     }
 }

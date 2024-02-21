@@ -35,8 +35,8 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - IgnoreEnemy
+  - IgnorePlayer
   - 
   m_SortingLayers:
   - name: Default

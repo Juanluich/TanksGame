@@ -5,21 +5,21 @@ using UnityEngine.Events;
 
 public class ProjectileEnemy : MonoBehaviour
 {
-    public UnityEvent onNotifyHit;
+    public UnityEvent onPlayerHit;
+    public UnityEvent onHit;
 
-    [SerializeField] AudioSource audioSource;
-    [SerializeField] AudioClip impactSFX;
+    [SerializeField] AudioSource _audioSource;
+    [SerializeField] AudioClip _impactSFX;
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag == "Enemy") return;
-
         if (collision.collider.tag == "Player")
         {
-            onNotifyHit.Invoke();
+            onPlayerHit.Invoke();
             Debug.Log("Player hitted!");
         }
-        Debug.Log(collision.collider.name);
-        audioSource.PlayOneShot(impactSFX);
+        onHit.Invoke();
+
+        _audioSource.PlayOneShot(_impactSFX);
         Invoke(nameof(Desactivate), .25f);
     }
 
