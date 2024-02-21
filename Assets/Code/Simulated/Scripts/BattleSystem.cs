@@ -11,6 +11,12 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] PlayerTurn _Player1;
     [SerializeField] EnemyTurn _Player2;
 
+    [SerializeField] PlayerHealth _PlayerHealth1;
+    [SerializeField] PlayerHealth _PlayerHealth2;
+
+    [SerializeField] GameObject WinPanel;
+    [SerializeField] GameObject LosePanel;
+
     void Start()
     {
         state = BattleState.PLAYERTURN;
@@ -20,9 +26,13 @@ public class BattleSystem : MonoBehaviour
 
     private void Update()
     {
+        if(_PlayerHealth1.currentHealth <= 0) { state = BattleState.LOST;}
+        if(_PlayerHealth2.currentHealth <= 0) { state = BattleState.WON;}
+
         switch (state)
         {
             case BattleState.START:
+                // Tutorial stuff
                 break;
             case BattleState.PLAYERTURN:
                 SetPlayerTurn();
@@ -31,8 +41,10 @@ public class BattleSystem : MonoBehaviour
                 SetEnemyTurn();
                 break;
             case BattleState.WON:
+                SetWon();
                 break;
             case BattleState.LOST:
+                SetGameOver();
                 break;
         }
     }
@@ -64,12 +76,16 @@ public class BattleSystem : MonoBehaviour
 
     void SetWon()
     {
-
+        WinPanel.SetActive(true);
+        _Player1.DisableFunctionality();
+        _Player2.DisableFunctionality();
     }
 
     void SetGameOver()
     {
-
+        LosePanel.SetActive(true);
+        _Player1.DisableFunctionality();
+        _Player2.DisableFunctionality();
     }
     
 }

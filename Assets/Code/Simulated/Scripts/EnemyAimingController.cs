@@ -8,15 +8,15 @@ public class EnemyAimingController : MonoBehaviour
     [SerializeField] PlayerHealth _playerHealth;
     [SerializeField] EnemyShootController _shootController;
 
-    float _accuracyError;
+    float _marginOfError;
     float _heightAdded;
 
     public void CalcDirection(Transform targetPosition, Transform playerPosition)
     {
         CalcDifficulty();
         // Margin of error
-        Vector3 accuracyPos = (Random.onUnitSphere * _accuracyError) + playerPosition.position;
-        accuracyPos.y = 0f;
+        Vector3 accuracyPos = (Random.onUnitSphere * _marginOfError) + playerPosition.position;
+        accuracyPos.y = -0.18f;
 
         targetPosition.DOMove(accuracyPos, 2f)
             .SetEase(Ease.Linear)
@@ -25,27 +25,27 @@ public class EnemyAimingController : MonoBehaviour
 
     private void CalcDifficulty()
     { 
-        // max height = 5, max accuracy = 2
+        // max height = 5, max accuracy = 3
         if (_playerHealth.currentHealth == 100)
         {
-            _accuracyError = 0;
-            _heightAdded = 1;
+            _marginOfError = 3;
+            _heightAdded = 2f;
         }
         else if (_playerHealth.currentHealth < 100 && _playerHealth.currentHealth > 50)
         {
-            _accuracyError = 1;
-            _heightAdded = 2;
+            _marginOfError = 1;
+            _heightAdded = 3f;
         }
         else if (_playerHealth.currentHealth < 50 && _playerHealth.currentHealth > 0)
         {
-            _accuracyError = 2;
-            _heightAdded = 4;
+            _marginOfError = 0;
+            _heightAdded = 5;
         }
     }
     private void CalcHeight() 
     {
         DOTween.To(() => _shootController.height, x => _shootController.height = x,
-                _shootController.height + _heightAdded, 1f)
+                _heightAdded, 1f)
             .SetEase(Ease.Linear).OnComplete(() => _shootController.attack = true);
     }
 }

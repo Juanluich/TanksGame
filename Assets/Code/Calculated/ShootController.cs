@@ -58,7 +58,7 @@ public class ShootController : MonoBehaviour
             CalculatePathWithHeight(targetPos, height, out v0, out angle, out time);
 
             DrawPath(groundDirection.normalized, v0, angle, time, _step);
-            if (Input.GetKeyDown(KeyCode.Space) && !shooted)
+            if (Input.GetMouseButton(1) && !shooted)
             {
                 projectile.SetActive(true);
                 StopAllCoroutines();

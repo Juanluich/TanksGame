@@ -68,7 +68,7 @@ public class EnemyShootController : MonoBehaviour
     IEnumerator PrepareShooting(Vector3 groundDirection, float angle, float v0, float time)
     {
         _aimingController.CalcDirection(_targetCircle, _player1.transform);
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(3);
         if (attack)
         {
             _projectile.SetActive(true);
