@@ -5,15 +5,21 @@ using UnityEngine;
 
 public class EnemyShootController : MonoBehaviour
 {
-    [SerializeField] GameObject _player1;
-    [SerializeField] GameObject _projectile;
 
+    [Header("Player1 reference")]
+    [SerializeField] GameObject _player1;
+
+
+    [Header("Trajectory calculation")]
+    [SerializeField] GameObject _projectile;
     [SerializeField] LineRenderer _line;
     [SerializeField] float _step;
     [SerializeField] Transform _firePoint;
-
-    [SerializeField] Transform _targetCircle;
     public float height = 2;
+
+
+    [Header("Tank Control")]
+    [SerializeField] Transform _targetCircle;
 
     [SerializeField] Transform _TopPart;
 

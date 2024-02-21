@@ -7,13 +7,14 @@ public class ShootController : MonoBehaviour
 {
     [SerializeField] GameObject projectile;
 
+    [Header("Trajectory calculation")]
     [SerializeField] LineRenderer _line;
     [SerializeField] float _step;
     [SerializeField] Transform _firePoint;
-
-    [SerializeField] Transform targetCircle;
     public float height = 2;
 
+    [Header("Tank Control")]
+    [SerializeField] Transform targetCircle;
     [SerializeField] Transform TopPart;
     public bool shooted;
 
