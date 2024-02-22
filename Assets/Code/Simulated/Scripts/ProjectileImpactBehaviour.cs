@@ -22,7 +22,7 @@ public class ProjectileImpactBehaviour : MonoBehaviour
         if (collision.collider.tag == "Enemy")
         {
             onEnemyHit.Invoke();
-            text = "Hitted!";
+            text = "Hit!";
         }
         onHit.Invoke();
 

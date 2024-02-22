@@ -23,7 +23,7 @@ public class ProjectileEnemy : MonoBehaviour
         {
             onPlayerHit.Invoke();
             Debug.Log("Player hitted!");
-            text = "Hitted!";
+            text = "Hit!";
         }
         onHit.Invoke();
 
